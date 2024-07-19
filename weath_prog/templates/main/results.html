@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %} 
+<h1>Погода в городе {{ city }}</h1>
+{% if weather_data %}
+    <h2>Прогноз на неделю</h2>
+    <ul>
+        {% for day in weather_data %}
+        <li>
+            <strong>{{ day.date }}:</strong> Max: {{ day.temp_max }}°C, Min: {{ day.temp_min }}°C
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Извините, мы не смогли найти информацию о погоде в городе {{ city }}.</p>
+{% endif %}
+<a href="{% url 'weather_view' %}">Попробовать снова</a>
+
+{% if request.user.is_authenticated %}
+<h2>История поиска</h2>
+<ul>
+    {% for search in request.user.searchhistory_set.all %}
+        <li>{{ search.city }} - {{ search.search_date }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
+
